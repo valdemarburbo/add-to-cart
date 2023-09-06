@@ -20,11 +20,15 @@ buttonEl.addEventListener("click", function () {
 
     push(itemsInDB, inputValue)
 
-    console.log(`${inputValue} added to database`)
+    clearInputEl()
 
-    inputEl.value = ""
-
-    shoppingListEl.innerHTML += `<li>${inputValue}</li>`
-
-    
+    appendItemToShoppingListEl(inputValue) 
 })
+
+function clearInputEl() {
+    inputEl.value = ""
+}
+
+function appendItemToShoppingListEl(itemValue) {
+    shoppingListEl.innerHTML += `<li>${itemValue}</li>`
+}
