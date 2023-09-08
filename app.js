@@ -10,16 +10,15 @@ const database = getDatabase(app)
 const itemsInDB = ref(database, "items")
 
 onValue(itemsInDB, (snapshot) => {
-        let itemsArray = Object.values(snapshot.val())
-
-        let itemList = ""
-
+        let itemsArray = Object.entries(snapshot.val())
+        
         for (let i = 0; i < itemsArray.length; i++) {
             let currentItem = itemsArray[i]
-            itemList += `<li>${currentItem}</li>`
-        }
+            let currentItemId = currentItem[0]
+            let currentItemValue = currentItem[1]
 
-        shoppingListEl.innerHTML = itemList
+            appendItemToShoppingListEl(currentItemValue);
+        }
     })
 
 const buttonEl = document.getElementById("add-button")
@@ -40,6 +39,8 @@ function clearInputEl() {
     inputEl.value = ""
 }
 
-// function appendItemToShoppingListEl(itemValue) {
-//     shoppingListEl.innerHTML += `<li>${itemValue}</li>`
-// }
+function appendItemToShoppingListEl(itemValue) {
+    let newEl = document.createElement("li")
+    newEl.textContent = itemValue
+    shoppingListEl.append(newEl)
+}
