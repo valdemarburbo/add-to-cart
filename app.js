@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
-import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
+import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
 
 const appSettings = {
     databaseURL: "https://playground-c8093-default-rtdb.europe-west1.firebasedatabase.app/"
@@ -10,14 +10,18 @@ const database = getDatabase(app)
 const itemsInDB = ref(database, "items")
 
 onValue(itemsInDB, (snapshot) => {
-        let itemsArray = Object.entries(snapshot.val())
-        
-        for (let i = 0; i < itemsArray.length; i++) {
-            let currentItem = itemsArray[i]
-            let currentItemId = currentItem[0]
-            let currentItemValue = currentItem[1]
+        if (snapshot.exists()) {
+            let itemsArray = Object.entries(snapshot.val())
 
-            appendItemToShoppingListEl(currentItemValue);
+            clearShoppingListEl()
+            
+            for (let i = 0; i < itemsArray.length; i++) {
+                let currentItem = itemsArray[i]
+    
+                appendItemToShoppingListEl(currentItem);
+            }
+        } else {
+            shoppingListEl.innerHTML = "No items here... yet."
         }
     })
 
@@ -35,12 +39,25 @@ buttonEl.addEventListener("click", function () {
     // appendItemToShoppingListEl(inputValue) 
 })
 
+function clearShoppingListEl() {
+    shoppingListEl.innerHTML =""
+}
+
 function clearInputEl() {
     inputEl.value = ""
 }
 
-function appendItemToShoppingListEl(itemValue) {
+function appendItemToShoppingListEl(item) {
+    let itemID = item[0]
+    let itemValue = item[1]
+
     let newEl = document.createElement("li")
     newEl.textContent = itemValue
+    newEl.addEventListener("click", () => {
+        let exactLocationOfItemInDB = ref(database, `items/${itemID}`)
+        
+        remove(exactLocationOfItemInDB)
+    })
+
     shoppingListEl.append(newEl)
 }
