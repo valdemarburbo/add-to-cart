@@ -21,7 +21,13 @@ onValue(itemsInDB, (snapshot) => {
                 appendItemToShoppingListEl(currentItem);
             }
         } else {
-            shoppingListEl.innerHTML = "No items here... yet."
+            clearShoppingListEl()
+
+            let newP = document.createElement("p")
+            newP.textContent = "No items here... yet."
+            newP.classList.add("no-items")
+
+            shoppingListEl.append(newP)
         }
     })
 
