@@ -40,7 +40,7 @@ buttonEl.addEventListener("click", function () {
 })
 
 function clearShoppingListEl() {
-    shoppingListEl.innerHTML =""
+    shoppingListEl.innerHTML = ""
 }
 
 function clearInputEl() {
